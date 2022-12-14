@@ -1,6 +1,6 @@
 One of many ways to look at this [question](https://stackoverflow.com/q/74798238/5438626) is that there's only one display area (albeit which might be comprised of many screens) and only one element of it can change at any moment in time. To my way of thinking, this means that having more than one UI thread can often be self defeating. And since the machine has some finite number of cores, having a very large number of threads (whether of the UI or worker variety) means you can start to have a lot of overhead marshalling the context as threads switch off.
 
-Here's one way of achieving the kind of result you describe: this mock sample opens 10 forms that are all performing some long-running task. The approach that I'm taking here is to have the forms fire an event whenever a task completes. Now, the main form can subscribe to that event and marshal the received data onto the one-and-only UI thread to display the result.
+Here's one way of achieving the kind of result you describe: this mock sample opens 10 forms that will run their continuous long-running tasks in parallel. The approach that I'm taking here is to have the forms fire an event whenever a task completes. Now, the main form can subscribe to that event and marshal the received data onto the one-and-only UI thread to display the result. I have also included a textbox with a data binding to try and address that aspect of your question.
 
         public MainForm()
         {
