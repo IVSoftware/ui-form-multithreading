@@ -12,7 +12,7 @@ Here's one way of achieving the kind of result you describe: this mock sample op
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-
+            // Exercise a data binding
             textBox1.DataBindings.Add(
                 nameof(TextBox.Text),
                 this,

@@ -12,7 +12,7 @@ namespace ui_form_multithreading
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-
+            // Exercise a data binding
             textBox1.DataBindings.Add(
                 nameof(TextBox.Text),
                 this,
