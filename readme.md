@@ -49,7 +49,7 @@ Here's one way of achieving the kind of result you describe: This mock sample op
     }
 ***
 
-The 'other'' 10 forms use this class which mocks a binding source like this:
+The 'other' 10 forms use this class which mocks a binding source like this:
 
     public partial class FormWithLongRunningTask : Form, INotifyPropertyChanged
     {
