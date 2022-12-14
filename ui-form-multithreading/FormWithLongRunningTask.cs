@@ -18,8 +18,9 @@
                 {
                     await Task.Delay(TimeSpan.FromSeconds(_rando.NextDouble() * 10));
                     var e = new TaskCompleteEventArgs();
-                    Text = $"Task Completed @ {e.TimeStamp}";
+                    Text = $"Timestamp @ {e.TimeStamp.ToString("o")}";
                     TaskComplete?.Invoke(this, e);
+                    BringToFront();
                 }
                 catch (ObjectDisposedException)
                 {
