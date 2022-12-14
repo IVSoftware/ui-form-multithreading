@@ -1,6 +1,6 @@
-One of many ways to look at this [question](https://stackoverflow.com/q/74798238/5438626) is that there's only one display area (albeit which might be comprised of many screens) and only one element of it can change at any moment in time. To my way of thinking, this means that having more than one UI thread can often be self defeating (unless your UI is testing another UI). And since the machine has some finite number of cores, having a very large number of threads (whether of the UI or worker variety) means you can start to have a lot of overhead marshalling the context as threads switch off.
+One of many ways to look at this [question](https://stackoverflow.com/q/74798238/5438626) is that there's only one display area (albeit which might consist of many screens) and only one element of it can change at any given moment. To my way of thinking, this means that having more than one UI thread can often be self defeating (unless your UI is testing another UI). And since the machine has some finite number of cores, having a very large number of threads (whether of the UI or worker variety) means you can start to have a lot of overhead marshalling the context as threads switch off.
 
-Here's one way of achieving the kind of result you describe: this mock sample opens 10 forms that will run their continuous long-running tasks in parallel. To mock data binding where FormWithLongRunningTask is the binding source, the MainForm subscribes to the `PropertyChanged` event. When a `PropertyChanged` event is received, the main form can identify the sender and inspect `e` to determine which property has changed. In this case, if the property is `TimeStamp`, the received data is marshalled onto the one-and-only UI thread to display the result.
+Here's one way of achieving the kind of result you describe: This mock sample opens 10 forms that will run their continuous long-running tasks in parallel. To mock data binding where FormWithLongRunningTask is the binding source, the MainForm subscribes to the `PropertyChanged` event. When a `PropertyChanged` event is received, the main form can identify the sender and inspect `e` to determine which property has changed. In this case, if the property is `TimeStamp`, the received data is marshalled onto the one-and-only UI thread to display the result.
 
     public partial class MainForm : Form
     {
@@ -108,4 +108,4 @@ The 'other'' 10 forms use this class which mocks a binding source like this:
 I believe that there's no 'right' answer to your question but I hope there's something here that might move things forward for you.
 
 
-  [1]: https://i.stack.imgur.com/zpLGs.png
+  [1]: https://i.stack.imgur.com/Cahr7.png
