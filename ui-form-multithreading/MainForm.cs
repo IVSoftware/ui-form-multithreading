@@ -2,7 +2,7 @@ using System.ComponentModel;
 
 namespace ui_form_multithreading
 {
-    public partial class MainForm : Form
+    public partial class MainForm : Form, INotifyPropertyChanged
     {
         public MainForm()
         {
@@ -12,13 +12,19 @@ namespace ui_form_multithreading
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            FormWithLongRunningTask.PropertyChanged += onAnyPropertyChanged;
+            FormWithLongRunningTask.PropertyChanged += onAnyFWLRTPropertyChanged;
             for (int i = 0; i < 10; i++)
             {
                 new FormWithLongRunningTask { Name = $"Form{i}" }.Show(this);
             }
+            // Exercise a data binding
+            textBoxWithDataBinding.DataBindings.Add(
+                nameof(TextBox.Text),
+                this,
+                nameof(ReceivedTimestamp)
+            );
         }
-        private void onAnyPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        private void onAnyFWLRTPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (sender is FormWithLongRunningTask form)
             {
@@ -37,10 +43,26 @@ namespace ui_form_multithreading
                         $"Sender: {form.Name} @ {form.TimeStamp}{Environment.NewLine}");
                     richTextBox.Select(richTextBox.TextLength, 0);
                     richTextBox.ScrollToCaret();
-                    textBoxWithDataBinding.Text = form.TimeStamp.ToLongTimeString();
+                    // Test the textbox data binding
+                    ReceivedTimestamp = form.TimeStamp.ToLongTimeString();
                 });
             }
         }
+        string _ReceivedTimestamp = string.Empty;
+        public string ReceivedTimestamp
+        {
+            get => _ReceivedTimestamp;
+            set
+            {
+                if (!Equals(_ReceivedTimestamp, value))
+                {
+                    _ReceivedTimestamp = value;
+                    PropertyChanged?
+                        .Invoke(this, new PropertyChangedEventArgs(nameof(ReceivedTimestamp)));
+                }
+            }
+        }
+        public event PropertyChangedEventHandler? PropertyChanged;
         Color[] _colors = new Color[]
         {
             Color.Black, Color.Blue, Color.Green, Color.LightSalmon, Color.SeaGreen,
