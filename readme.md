@@ -1,6 +1,6 @@
-One of many ways to look at this is that there's only one display area (albeit which might be comprised of many screens) and only one element of it can change at any moment in time. To my way of thinking, this means that having more than one UI thread is self-defeating. And since the machine has some finite number of cores and with too many threads (UI or worker) there can start to be a lot of overhead marshalling the context as threads switch off.
+One of many ways to look at this [question](https://stackoverflow.com/q/74798238/5438626) is that there's only one display area (albeit which might be comprised of many screens) and only one element of it can change at any moment in time. To my way of thinking, this means that having more than one UI thread can often be self defeating. And since the machine has some finite number of cores, having a very large number of threads (whether of the UI or worker variety) means you can start to have a lot of overhead marshalling the context as threads switch off.
 
-The way I mocked this out is to open 10 forms that are all performing some long-running task. The approach that I'm taking here is to have the forms fire an event whenever a task completes. Now, the main form can subscribe to that event and marshall the received data onto the one-and-only UI thread to display the result.
+Here's one way of achieving the kind of result you describe: this mock sample opens 10 forms that are all performing some long-running task. The approach that I'm taking here is to have the forms fire an event whenever a task completes. Now, the main form can subscribe to that event and marshal the received data onto the one-and-only UI thread to display the result.
 
         public MainForm()
         {
@@ -34,8 +34,9 @@ The way I mocked this out is to open 10 forms that are all performing some long-
             Color.BlueViolet, Color.DarkCyan, Color.Maroon, Color.Chocolate, Color.DarkKhaki
         };
     }
+***
 
-Where the 'other'' forms are mocked like this:
+The 'other'' forms are mocked like this:
 
     public partial class FormWithLongRunningTask : Form
     {
@@ -54,7 +55,7 @@ Where the 'other'' forms are mocked like this:
                 {
                     await Task.Delay(TimeSpan.FromSeconds(_rando.NextDouble() * 10));
                     var e = new TaskCompleteEventArgs();
-                    Text = $"Timestamp @ {e.TimeStamp.ToString("o")}";
+                    Text = $"@ {e.TimeStamp.ToLongTimeString()}";
                     TaskComplete?.Invoke(this, e);
                     BringToFront();
                 }
@@ -70,5 +71,11 @@ Where the 'other'' forms are mocked like this:
     {
         public DateTime TimeStamp { get; } = DateTime.Now;
     }
+***
+
+[![multithreaded forms][1]][1]
+
+I believe that there's no 'right' answer to a question but I hope there's something here that might move things forward for you.
 
 
+  [1]: https://i.stack.imgur.com/kqhMf.png
