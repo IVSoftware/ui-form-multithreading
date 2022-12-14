@@ -33,6 +33,8 @@ Here's one way of achieving the kind of result you describe: this mock sample op
                     richTextBox.SelectionColor = _colors[int.Parse(control.Name.Replace("Form", string.Empty))];
                     richTextBox
                     .AppendText($"Sender: {control.Name} @ {e.TimeStamp}{Environment.NewLine}");
+                    richTextBox.Select(richTextBox.TextLength, 0);
+                    richTextBox.ScrollToCaret();
                     // Test the data binding
                     ReceivedTimestamp = e.TimeStamp.ToLongTimeString(); 
                 });
