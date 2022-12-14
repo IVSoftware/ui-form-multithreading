@@ -1,6 +1,8 @@
+using System.ComponentModel;
+
 namespace ui_form_multithreading
 {
-    public partial class MainForm : Form
+    public partial class MainForm : Form, INotifyPropertyChanged
     {
         public MainForm()
         {
@@ -10,6 +12,12 @@ namespace ui_form_multithreading
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
+            textBox1.DataBindings.Add(
+                nameof(TextBox.Text),
+                this,
+                nameof(ReceivedTimestamp)
+            );
             FormWithLongRunningTask.TaskComplete += onAnyTaskComplete;
             for (int i = 0; i < 10; i++)
             {
@@ -24,14 +32,34 @@ namespace ui_form_multithreading
                 {
                     richTextBox.SelectionColor = _colors[int.Parse(control.Name.Replace("Form", string.Empty))];
                     richTextBox
-                    .AppendText($"Sender: {control.Name} @ {e.TimeStamp}{Environment.NewLine}");    
+                    .AppendText($"Sender: {control.Name} @ {e.TimeStamp}{Environment.NewLine}");
+                    // Test the data binding
+                    ReceivedTimestamp = e.TimeStamp.ToLongTimeString(); 
                 });
             }
         }
+
         Color[] _colors = new Color[]
         {
             Color.Black, Color.Blue, Color.Green, Color.LightSalmon, Color.SeaGreen,
             Color.BlueViolet, Color.DarkCyan, Color.Maroon, Color.Chocolate, Color.DarkKhaki
         };
+
+        string _ReceivedTimestamp = string.Empty;
+        public string ReceivedTimestamp
+        {
+            get => _ReceivedTimestamp;
+            set
+            {
+                if (!Equals(_ReceivedTimestamp, value))
+                {
+                    _ReceivedTimestamp = value;
+                    PropertyChanged?
+                        .Invoke(this, new PropertyChangedEventArgs(nameof(ReceivedTimestamp)));
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
     }
 }
