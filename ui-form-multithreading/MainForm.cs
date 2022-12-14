@@ -33,18 +33,18 @@ namespace ui_form_multithreading
                     switch (e.PropertyName)
                     {
                         case nameof(FormWithLongRunningTask.TimeStamp):
+                            richTextBox.SelectionColor = _colors[int.Parse(form.Name.Replace("Form", string.Empty))];
+                            richTextBox
+                            .AppendText(
+                                $"Sender: {form.Name} @ {form.TimeStamp}{Environment.NewLine}");
+                            richTextBox.Select(richTextBox.TextLength, 0);
+                            richTextBox.ScrollToCaret();
+                            // Test the textbox data binding
+                            ReceivedTimestamp = form.TimeStamp.ToLongTimeString();
                             break;
                         default:
                             break;
                     }
-                    richTextBox.SelectionColor = _colors[int.Parse(form.Name.Replace("Form", string.Empty))];
-                    richTextBox
-                    .AppendText(
-                        $"Sender: {form.Name} @ {form.TimeStamp}{Environment.NewLine}");
-                    richTextBox.Select(richTextBox.TextLength, 0);
-                    richTextBox.ScrollToCaret();
-                    // Test the textbox data binding
-                    ReceivedTimestamp = form.TimeStamp.ToLongTimeString();
                 });
             }
         }
