@@ -9,7 +9,6 @@
             base.OnLoad(e);
             _ = runRandomDelayLoop();
         }
-
         private async Task runRandomDelayLoop()
         {
             while(true)
@@ -18,7 +17,7 @@
                 {
                     await Task.Delay(TimeSpan.FromSeconds(_rando.NextDouble() * 10));
                     var e = new TaskCompleteEventArgs();
-                    Text = $"Timestamp @ {e.TimeStamp.ToString("o")}";
+                    Text = $"@ {e.TimeStamp.ToLongTimeString()}";
                     TaskComplete?.Invoke(this, e);
                     BringToFront();
                 }

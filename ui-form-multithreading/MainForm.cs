@@ -7,12 +7,6 @@ namespace ui_form_multithreading
             InitializeComponent();
             BackColor = Color.CornflowerBlue;
         }
-        Color[] _colors = new Color[]
-        {
-            Color.Black, Color.Blue, Color.Green, Color.LightSalmon, Color.SeaGreen,
-            Color.BlueViolet, Color.DarkCyan, Color.Maroon, Color.Chocolate, Color.DarkKhaki
-        };
-
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -22,7 +16,6 @@ namespace ui_form_multithreading
                 new FormWithLongRunningTask { Name = $"Form{i}" }.Show(this);
             }
         }
-
         private void onAnyTaskComplete(object sender, TaskCompleteEventArgs e)
         {
             if (sender is Control control)
@@ -35,5 +28,10 @@ namespace ui_form_multithreading
                 });
             }
         }
+        Color[] _colors = new Color[]
+        {
+            Color.Black, Color.Blue, Color.Green, Color.LightSalmon, Color.SeaGreen,
+            Color.BlueViolet, Color.DarkCyan, Color.Maroon, Color.Chocolate, Color.DarkKhaki
+        };
     }
 }
