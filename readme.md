@@ -2,6 +2,8 @@ One of many ways to look at this [question](https://stackoverflow.com/q/74798238
 
 Here's one way of achieving the kind of result you describe: this mock sample opens 10 forms that will run their continuous long-running tasks in parallel. The approach that I'm taking here is to have the forms fire an event whenever a task completes. Now, the main form can subscribe to that event and marshal the received data onto the one-and-only UI thread to display the result. I have also included a textbox with a data binding to try and address that aspect of your question.
 
+    public partial class MainForm : Form, INotifyPropertyChanged
+    {
         public MainForm()
         {
             InitializeComponent();
@@ -10,6 +12,12 @@ Here's one way of achieving the kind of result you describe: this mock sample op
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
+            textBox1.DataBindings.Add(
+                nameof(TextBox.Text),
+                this,
+                nameof(ReceivedTimestamp)
+            );
             FormWithLongRunningTask.TaskComplete += onAnyTaskComplete;
             for (int i = 0; i < 10; i++)
             {
@@ -24,10 +32,28 @@ Here's one way of achieving the kind of result you describe: this mock sample op
                 {
                     richTextBox.SelectionColor = _colors[int.Parse(control.Name.Replace("Form", string.Empty))];
                     richTextBox
-                    .AppendText($"Sender: {control.Name} @ {e.TimeStamp}{Environment.NewLine}");    
+                    .AppendText($"Sender: {control.Name} @ {e.TimeStamp}{Environment.NewLine}");
+                    // Test the data binding
+                    ReceivedTimestamp = e.TimeStamp.ToLongTimeString(); 
                 });
             }
         }
+        string _ReceivedTimestamp = string.Empty;
+        public string ReceivedTimestamp
+        {
+            get => _ReceivedTimestamp;
+            set
+            {
+                if (!Equals(_ReceivedTimestamp, value))
+                {
+                    _ReceivedTimestamp = value;
+                    PropertyChanged?
+                        .Invoke(this, new PropertyChangedEventArgs(nameof(ReceivedTimestamp)));
+                }
+            }
+        }
+        public event PropertyChangedEventHandler? PropertyChanged;
+
         Color[] _colors = new Color[]
         {
             Color.Black, Color.Blue, Color.Green, Color.LightSalmon, Color.SeaGreen,
