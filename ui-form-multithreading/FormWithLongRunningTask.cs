@@ -1,9 +1,13 @@
-﻿namespace ui_form_multithreading
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
+namespace ui_form_multithreading
 {
-    public partial class FormWithLongRunningTask : Form
+    public partial class FormWithLongRunningTask : Form, INotifyPropertyChanged
     {
-        static Random _rando = new Random();
+        static Random _rando = new Random(8);
         public FormWithLongRunningTask() => InitializeComponent();
+
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -16,9 +20,8 @@
                 try
                 {
                     await Task.Delay(TimeSpan.FromSeconds(_rando.NextDouble() * 10));
-                    var e = new TaskCompleteEventArgs();
-                    Text = $"@ {e.TimeStamp.ToLongTimeString()}";
-                    TaskComplete?.Invoke(this, e);
+                    TimeStamp = DateTime.Now;
+                    Text = $"@ {TimeStamp.ToLongTimeString()}";
                     BringToFront();
                 }
                 catch (ObjectDisposedException)
@@ -26,11 +29,28 @@
                 }
             }
         }
-        public static event TaskCompleteEventHandler TaskComplete;
-    }
-    public delegate void TaskCompleteEventHandler(Object sender, TaskCompleteEventArgs e);
-    public class TaskCompleteEventArgs : EventArgs
-    {
-        public DateTime TimeStamp { get; } = DateTime.Now;
+        DateTime _timeStamp = DateTime.Now;
+        public DateTime TimeStamp
+        {
+            get => _timeStamp;
+            set
+            {
+                if (!Equals(_timeStamp, value))
+                {
+                    _timeStamp = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        event PropertyChangedEventHandler? INotifyPropertyChanged.PropertyChanged
+        {
+            add => PropertyChanged += value;
+            remove => PropertyChanged -= value;
+        }
+        public static event PropertyChangedEventHandler? PropertyChanged;
     }
 }

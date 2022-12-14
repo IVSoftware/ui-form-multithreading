@@ -30,7 +30,7 @@
         {
             this.richTextBox = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBoxWithDataBinding = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // richTextBox
@@ -55,17 +55,17 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(191, 14);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(275, 31);
-            this.textBox1.TabIndex = 2;
+            this.textBoxWithDataBinding.Location = new System.Drawing.Point(191, 14);
+            this.textBoxWithDataBinding.Name = "textBox1";
+            this.textBoxWithDataBinding.Size = new System.Drawing.Size(275, 31);
+            this.textBoxWithDataBinding.TabIndex = 2;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(478, 744);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.textBoxWithDataBinding);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.richTextBox);
             this.Name = "MainForm";
@@ -80,6 +80,6 @@
 
         private RichTextBox richTextBox;
         private Label label1;
-        private TextBox textBox1;
+        private TextBox textBoxWithDataBinding;
     }
 }
