@@ -1,6 +1,6 @@
 One of many ways to look at this [question](https://stackoverflow.com/q/74798238/5438626) is that there's only one display area (albeit which might consist of many screens) and only one element of it can change at any given moment. To my way of thinking, this means that having more than one UI thread can often be self defeating (unless your UI is testing another UI). And since the machine has some finite number of cores, having a very large number of threads (whether of the UI or worker variety) means you can start to have a lot of overhead marshalling the context as threads switch off.
 
-If we wanted to make a [Minimal Reproducible Example](https://stackoverflow.com/help/minimal-reproducible-example) that has 10 `Form` objects executing continuous "mock update" tasks in parallel, what we could do instead of the "data property change hub" you mentioned is to implement INotifyPropertyChanged in those form classes with static `PropertyChanged` event that gets fired when the update occurs. To mock data binding where FormWithLongRunningTask is the binding source, the MainForm subscribes to the `PropertyChanged` event and adds a new `Record` to the `BindingList<Record>` by identifying the sender and inspecting `e` to determine which property has changed. In this case, if the property is `TimeStamp`, the received data is marshalled onto the one-and-only UI thread to display the result in the `DataGridView`.
+If we wanted to make a [Minimal Reproducible Example](https://stackoverflow.com/help/minimal-reproducible-example) that has 10 `Form` objects executing continuous "mock update" tasks in parallel, what we could do instead of the "data property change hub" you mentioned is to implement `INotifyPropertyChanged` in those form classes with static `PropertyChanged` event that gets fired when the update occurs. To mock data binding where `FormWithLongRunningTask` is the binding source, the main form subscribes to the `PropertyChanged` event and adds a new `Record` to the `BindingList<Record>` by identifying the sender and inspecting `e` to determine which property has changed. In this case, if the property is `TimeStamp`, the received data is marshalled onto the one-and-only UI thread to display the result in the `DataGridView`.
 
     public partial class MainForm : Form, INotifyPropertyChanged
     {
@@ -43,7 +43,7 @@ If we wanted to make a [Minimal Reproducible Example](https://stackoverflow.com/
 [![main form with DataGridView][1]][1]
 ***
 
-The `DataGridView` on the main form uses this custom class:
+The `DataGridView` on the main form uses these custom classes:
 
     class DataGridViewEx : DataGridView
     {
@@ -85,6 +85,11 @@ The `DataGridView` on the main form uses this custom class:
             Color.Black, Color.Blue, Color.Green, Color.LightSalmon, Color.SeaGreen,
             Color.BlueViolet, Color.DarkCyan, Color.Maroon, Color.Chocolate, Color.DarkKhaki
         };
+    }
+    class Record
+    {
+        public string Sender { get; set; } = string.Empty;
+        public DateTime TimeStamp { get; set; }
     }
 
 

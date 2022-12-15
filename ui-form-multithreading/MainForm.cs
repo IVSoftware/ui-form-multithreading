@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace ui_form_multithreading
 {
-    public partial class MainForm : Form, INotifyPropertyChanged
+    public partial class MainForm : Form
     {
         public MainForm() => InitializeComponent();
         protected override void OnLoad(EventArgs e)
@@ -36,7 +36,6 @@ namespace ui_form_multithreading
                 });
             }
         }
-        public event PropertyChangedEventHandler? PropertyChanged;
     }
     class DataGridViewEx : DataGridView
     {
