@@ -41,6 +41,12 @@ namespace ui_form_multithreading
                             richTextBox.ScrollToCaret();
                             // Test the textbox data binding
                             ReceivedTimestamp = form.TimeStamp.ToLongTimeString();
+
+                            dataGridViewEx.DataSource.Add(new Record
+                            {
+                                Sender = form.Name,
+                                TimeStamp = form.TimeStamp,
+                            });
                             break;
                         default:
                             break;
@@ -68,5 +74,27 @@ namespace ui_form_multithreading
             Color.Black, Color.Blue, Color.Green, Color.LightSalmon, Color.SeaGreen,
             Color.BlueViolet, Color.DarkCyan, Color.Maroon, Color.Chocolate, Color.DarkKhaki
         };
+    }
+    class DataGridViewEx : DataGridView
+    {
+        public new BindingList<Record> DataSource { get; } = new BindingList<Record>();
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            base.OnHandleCreated(e);
+
+            // Format columns
+            base.DataSource = this.DataSource;
+            DataSource.Add(new Record());
+            Columns[nameof(Record.Sender)].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            var col =  Columns[nameof(Record.TimeStamp)];
+            col.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            col.DefaultCellStyle.Format = "hh:mm:ss tt";
+            DataSource.Clear();
+        }
+    }
+    class Record
+    {
+        public string Sender { get; set; } = string.Empty;
+        public DateTime TimeStamp { get; set; }
     }
 }

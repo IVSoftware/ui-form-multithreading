@@ -31,6 +31,8 @@
             this.richTextBox = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.textBoxWithDataBinding = new System.Windows.Forms.TextBox();
+            this.dataGridViewEx = new DataGridViewEx();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEx)).BeginInit();
             this.SuspendLayout();
             // 
             // richTextBox
@@ -40,7 +42,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.richTextBox.Location = new System.Drawing.Point(0, 51);
             this.richTextBox.Name = "richTextBox";
-            this.richTextBox.Size = new System.Drawing.Size(478, 693);
+            this.richTextBox.Size = new System.Drawing.Size(478, 519);
             this.richTextBox.TabIndex = 0;
             this.richTextBox.Text = "";
             // 
@@ -53,24 +55,36 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "Data Bound TextBox";
             // 
-            // textBox1
+            // textBoxWithDataBinding
             // 
             this.textBoxWithDataBinding.Location = new System.Drawing.Point(191, 14);
-            this.textBoxWithDataBinding.Name = "textBox1";
+            this.textBoxWithDataBinding.Name = "textBoxWithDataBinding";
             this.textBoxWithDataBinding.Size = new System.Drawing.Size(275, 31);
             this.textBoxWithDataBinding.TabIndex = 2;
+            // 
+            // dataGridView1
+            // 
+            this.dataGridViewEx.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewEx.Location = new System.Drawing.Point(0, 591);
+            this.dataGridViewEx.Name = "dataGridView1";
+            this.dataGridViewEx.RowHeadersWidth = 62;
+            this.dataGridViewEx.RowTemplate.Height = 33;
+            this.dataGridViewEx.Size = new System.Drawing.Size(478, 456);
+            this.dataGridViewEx.TabIndex = 3;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(478, 744);
+            this.ClientSize = new System.Drawing.Size(478, 1043);
+            this.Controls.Add(this.dataGridViewEx);
             this.Controls.Add(this.textBoxWithDataBinding);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.richTextBox);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Main Form";
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEx)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -81,5 +95,6 @@
         private RichTextBox richTextBox;
         private Label label1;
         private TextBox textBoxWithDataBinding;
+        private DataGridViewEx dataGridViewEx;
     }
 }
