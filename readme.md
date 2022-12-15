@@ -2,7 +2,7 @@ One of many ways to look at this [question](https://stackoverflow.com/q/74798238
 
 If we wanted to make a [Minimal Reproducible Example](https://stackoverflow.com/help/minimal-reproducible-example) that has 10 `Form` objects executing continuous "mock update" tasks in parallel, what we could do instead of the "data property change hub" you mentioned is to implement `INotifyPropertyChanged` in those form classes with static `PropertyChanged` event that gets fired when the update occurs. To mock data binding where `FormWithLongRunningTask` is the binding source, the main form subscribes to the `PropertyChanged` event and adds a new `Record` to the `BindingList<Record>` by identifying the sender and inspecting `e` to determine which property has changed. In this case, if the property is `TimeStamp`, the received data is marshalled onto the one-and-only UI thread to display the result in the `DataGridView`.
 
-    public partial class MainForm : Form, INotifyPropertyChanged
+    public partial class MainForm : Form
     {
         public MainForm() => InitializeComponent();
         protected override void OnLoad(EventArgs e)
@@ -37,7 +37,6 @@ If we wanted to make a [Minimal Reproducible Example](https://stackoverflow.com/
                 });
             }
         }
-        public event PropertyChangedEventHandler? PropertyChanged;
     }
     
 [![main form with DataGridView][1]][1]
