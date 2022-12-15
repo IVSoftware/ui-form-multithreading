@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace ui_form_multithreading
 {
@@ -91,6 +92,25 @@ namespace ui_form_multithreading
             col.DefaultCellStyle.Format = "hh:mm:ss tt";
             DataSource.Clear();
         }
+        protected override void OnCellPainting(DataGridViewCellPaintingEventArgs e)
+        {
+            base.OnCellPainting(e);
+            if ((e.RowIndex > -1) && (e.RowIndex < DataSource.Count))
+            {
+                var record = DataSource[e.RowIndex];
+                var color = _colors[int.Parse(record.Sender.Replace("Form", string.Empty))];
+                e.CellStyle.ForeColor = color;
+                if (e.ColumnIndex > 0)
+                {
+                    CurrentCell = this[e.ColumnIndex, e.RowIndex];
+                }
+            }
+        }
+        Color[] _colors = new Color[]
+        {
+            Color.Black, Color.Blue, Color.Green, Color.LightSalmon, Color.SeaGreen,
+            Color.BlueViolet, Color.DarkCyan, Color.Maroon, Color.Chocolate, Color.DarkKhaki
+        };
     }
     class Record
     {
