@@ -5,11 +5,7 @@ namespace ui_form_multithreading
 {
     public partial class MainForm : Form, INotifyPropertyChanged
     {
-        public MainForm()
-        {
-            InitializeComponent();
-            BackColor = Color.CornflowerBlue;
-        }
+        public MainForm() => InitializeComponent();
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
