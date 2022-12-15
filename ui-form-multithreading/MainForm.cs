@@ -18,12 +18,6 @@ namespace ui_form_multithreading
             {
                 new FormWithLongRunningTask { Name = $"Form{i}" }.Show(this);
             }
-            // Exercise a data binding
-            textBoxWithDataBinding.DataBindings.Add(
-                nameof(TextBox.Text),
-                this,
-                nameof(ReceivedTimestamp)
-            );
         }
         private void onAnyFWLRTPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
@@ -34,15 +28,6 @@ namespace ui_form_multithreading
                     switch (e.PropertyName)
                     {
                         case nameof(FormWithLongRunningTask.TimeStamp):
-                            richTextBox.SelectionColor = _colors[int.Parse(form.Name.Replace("Form", string.Empty))];
-                            richTextBox
-                            .AppendText(
-                                $"Sender: {form.Name} @ {form.TimeStamp}{Environment.NewLine}");
-                            richTextBox.Select(richTextBox.TextLength, 0);
-                            richTextBox.ScrollToCaret();
-                            // Test the textbox data binding
-                            ReceivedTimestamp = form.TimeStamp.ToLongTimeString();
-
                             dataGridViewEx.DataSource.Add(new Record
                             {
                                 Sender = form.Name,
@@ -53,20 +38,6 @@ namespace ui_form_multithreading
                             break;
                     }
                 });
-            }
-        }
-        string _ReceivedTimestamp = string.Empty;
-        public string ReceivedTimestamp
-        {
-            get => _ReceivedTimestamp;
-            set
-            {
-                if (!Equals(_ReceivedTimestamp, value))
-                {
-                    _ReceivedTimestamp = value;
-                    PropertyChanged?
-                        .Invoke(this, new PropertyChangedEventArgs(nameof(ReceivedTimestamp)));
-                }
             }
         }
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -82,15 +53,20 @@ namespace ui_form_multithreading
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
+            if (!DesignMode)
+            {
+                base.DataSource = this.DataSource;
+                AllowUserToAddRows = false;
 
-            // Format columns
-            base.DataSource = this.DataSource;
-            DataSource.Add(new Record());
-            Columns[nameof(Record.Sender)].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            var col =  Columns[nameof(Record.TimeStamp)];
-            col.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            col.DefaultCellStyle.Format = "hh:mm:ss tt";
-            DataSource.Clear();
+                #region F O R M A T    C O L U M N S
+                DataSource.Add(new Record());
+                Columns[nameof(Record.Sender)].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                var col = Columns[nameof(Record.TimeStamp)];
+                col.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                col.DefaultCellStyle.Format = "hh:mm:ss tt";
+                DataSource.Clear();
+                #endregion F O R M A T    C O L U M N S
+            }
         }
         protected override void OnCellPainting(DataGridViewCellPaintingEventArgs e)
         {
