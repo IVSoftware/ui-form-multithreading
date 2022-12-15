@@ -102,7 +102,7 @@ namespace ui_form_multithreading
                 e.CellStyle.ForeColor = color;
                 if (e.ColumnIndex > 0)
                 {
-                    CurrentCell = this[e.ColumnIndex, e.RowIndex];
+                    CurrentCell = this[0, e.RowIndex];
                 }
             }
         }
