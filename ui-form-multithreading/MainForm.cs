@@ -41,11 +41,6 @@ namespace ui_form_multithreading
             }
         }
         public event PropertyChangedEventHandler? PropertyChanged;
-        Color[] _colors = new Color[]
-        {
-            Color.Black, Color.Blue, Color.Green, Color.LightSalmon, Color.SeaGreen,
-            Color.BlueViolet, Color.DarkCyan, Color.Maroon, Color.Chocolate, Color.DarkKhaki
-        };
     }
     class DataGridViewEx : DataGridView
     {
