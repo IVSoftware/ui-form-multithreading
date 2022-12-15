@@ -43,13 +43,9 @@ If we wanted to make a [Minimal Reproducible Example](https://stackoverflow.com/
         }
         public event PropertyChangedEventHandler? PropertyChanged;
     }
-
     
 
 [![enter image description here][1]][1]
-
-I believe that there's no 'right' answer to your question but I hope there's something here that might move things forward for you.
-
 
   [1]: https://i.stack.imgur.com/Cahr7.png
 ***
@@ -153,3 +149,6 @@ The 'other' 10 forms use this class which mocks a binding source like this:
         public static event PropertyChangedEventHandler? PropertyChanged;
     }
 ***
+
+
+I believe that there's no 'right' answer to your question but I hope there's something here that might move things forward for you.
